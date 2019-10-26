@@ -4,7 +4,8 @@ var marvelArray = ["Black Widow", "Captain America", "Hawkeye", "Hulk", "Iron Ma
 function renderMCUButtons() {
     $("#MCU-button").empty()
     for (var i = 0; i < marvelArray.length; i++) {
-        var btnEl = $("<button type='button' class='btn btn-danger'>").text(marvelArray[i]);
+        var btnEl = $("<button type='button' class='btn btn-danger marvelGif'>").text(marvelArray[i]);
+        btnEl.attr("marvel-name", marvelArray[i])
         $("#MCU-button").append(btnEl);
     }
 }
@@ -21,35 +22,40 @@ $("#MCU-input").click(function (event) {
     renderMCUButtons();
 })
 
-// meant to access GIPHY API to grab GIFs from GIPHY --> Still don't know how to NOT use JSON Stringify
+// meant to access GIPHY API to grab GIFs from GIPHY --> Still don't know how to NOT use JSON Stringify (JSON parse doesn't do anything)
 function displayMarvelGIFs() {
+
+
     var marvelGif = $(this).attr("marvel-name");
     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + marvelGif + "&api_key=EpVK6VRMjibb8ukv94r24DuoyrPJIkgU&limit=20";
-
+console.log(marvelGif)
     $.ajax({
         url: queryURL,
         method: "GET"
     }).then(function (response) {
-        $("#MCU-giphy").text(JSON.stringify(response));
+        for (var i = 0; i < response.data.length; i++) {
+            var imgTag = `<img src="${response.data[i].images.original_still.url}">`
+            $("#MCU-giphy").append(imgTag);
+        }
+        //
+        //console.log(response)
     });
 }
 
 // meant to add button to the current array after clicking "Assemble"
-$("button").click(function (event) {
-    event.preventDefault();
-    //console.log("click me again")
-    var marvelGif = $("#MCU-input").val().trim();
-    marvelArray.push(marvelGif);
-    console.log(marvelArray);
-    renderMCUButtons();
-});
+// $("button").click(function (event) {
+//     event.preventDefault();
+//     //console.log("click me again")
+//     var mcuGif = $("#MCU-input").val().trim();
+//     marvelArray.push(mcuGif);
+//     console.log(marvelArray);
+//     renderMCUButtons();
+// });
 
 // meant to call the previous function to display GIFs from GIPHY
-$(document).click(".marvelGif", displayMarvelGIFs);
+$(document).on("click", ".marvelGif", displayMarvelGIFs);
 
 renderMCUButtons();
-
-//console.log that sh*t
 
 
 // Bugs:
