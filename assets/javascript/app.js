@@ -11,6 +11,7 @@ function renderMCUButtons() {
 
 renderMCUButtons();
 
+// Creates a new button via user input
 $("#MCU-input").click(function (event) {
     event.preventDefault();
     //console.log("click me")
@@ -20,9 +21,10 @@ $("#MCU-input").click(function (event) {
     renderMCUButtons();
 })
 
+// meant to access GIPHY API to grab GIFs from GIPHY --> Still don't know how to NOT use JSON Stringify
 function displayMarvelGIFs() {
     var marvelGif = $(this).attr("marvel-name");
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + marvelGif + "&api_key=EpVK6VRMjibb8ukv94r24DuoyrPJIkgU";
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + marvelGif + "&api_key=EpVK6VRMjibb8ukv94r24DuoyrPJIkgU&limit=20";
 
     $.ajax({
         url: queryURL,
@@ -32,6 +34,7 @@ function displayMarvelGIFs() {
     });
 }
 
+// meant to add button to the current array after clicking "Assemble"
 $("button").click(function (event) {
     event.preventDefault();
     //console.log("click me again")
@@ -41,6 +44,7 @@ $("button").click(function (event) {
     renderMCUButtons();
 });
 
+// meant to call the previous function to display GIFs from GIPHY
 $(document).click(".marvelGif", displayMarvelGIFs);
 
 renderMCUButtons();
@@ -48,4 +52,7 @@ renderMCUButtons();
 //console.log that sh*t
 
 
-//
+// Bugs:
+// -- Clicking ANYWHERE - not just on buttons - causes the click function to initiate (JSON Stringify code appears)
+// -- *Not a bug, but don't know how to deal with* Get rid of the "JSON Stringify" command so I can display the actual GIFs
+// -- Button generation function generates an extra blank button instead of the one button upon pressing "Assemble"
