@@ -25,20 +25,28 @@ $("#MCU-input").click(function (event) {
 // meant to access GIPHY API to grab GIFs from GIPHY --> Still don't know how to NOT use JSON Stringify (JSON parse doesn't do anything)
 function displayMarvelGIFs() {
 
-
+    $("#MCU-giphy").empty()
     var marvelGif = $(this).attr("marvel-name");
     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + marvelGif + "&api_key=EpVK6VRMjibb8ukv94r24DuoyrPJIkgU&limit=20";
-console.log(marvelGif)
+    console.log(marvelGif)
     $.ajax({
         url: queryURL,
         method: "GET"
     }).then(function (response) {
         for (var i = 0; i < response.data.length; i++) {
-            var imgTag = `<img src="${response.data[i].images.original_still.url}">`
+            var imgTag =
+                `
+            <img 
+            class="marvelFirstClass" 
+            src="${response.data[i].images.original_still.url}"
+            data-still=${response.data[i].images.original_still.url}
+            data-animate=${response.data[i].images.original.url}
+            active=${false}
+            >`
             $("#MCU-giphy").append(imgTag);
         }
         //
-        //console.log(response)
+        console.log(response)
     });
 }
 
@@ -54,6 +62,39 @@ console.log(marvelGif)
 
 // meant to call the previous function to display GIFs from GIPHY
 $(document).on("click", ".marvelGif", displayMarvelGIFs);
+
+function animateMarvelGIFs() {
+    //console.log("hello hello")
+    //looked for the GIF we clicked on
+    var currentImage = $(this);
+
+    //if active is false, set the src link to animate link and set active to true
+    if (currentImage.attr("active") === "false") {
+
+        //set active link
+        currentImage.attr("src", currentImage.attr("data-animate"));
+
+        //set the active status to true
+        currentImage.attr("active", true);
+    }
+    else {
+
+        //if that status is active, set src to still
+        currentImage.attr("src", currentImage.attr("data-still"));
+        currentImage.attr("active", false)
+
+    }
+
+
+
+
+    //checked its attribute of 'animate' if it's true or false
+    //if it's true, make sure you have the 'animate' src 
+    //if it's false, make sure you have the still src
+    //switch between true and false to animate/still
+}
+
+$(document).on("click", ".marvelFirstClass", animateMarvelGIFs)
 
 renderMCUButtons();
 
