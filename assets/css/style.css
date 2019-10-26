@@ -4,3 +4,7 @@ button,
     input {
       margin: 10px;
     }
+
+    #MCU-button {
+      text-align: center;
+    }
